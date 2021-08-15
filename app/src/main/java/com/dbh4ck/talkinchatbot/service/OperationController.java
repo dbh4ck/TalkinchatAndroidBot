@@ -8,10 +8,12 @@ import com.dbh4ck.talkinchatbot.utils.Utils;
 import com.neovisionaries.ws.client.WebSocket;
 import com.neovisionaries.ws.client.WebSocketException;
 import com.neovisionaries.ws.client.WebSocketFactory;
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.Locale;
 import java.util.Random;
 import java.util.logging.Handler;
 
@@ -41,6 +43,7 @@ public class OperationController {
             }
             this.webSocket = this.webSocketFactory.createSocket(SOCKET_URL);
             this.webSocket.addListener(new SocketEventListener(webSocket, userName, passWord, roomName));
+            this.webSocket.setPingInterval(60 * 1000);
             String buildInfo = Utils.getInstance().getBuildInfo();
             String androidId = Utils.getInstance().getAndroidId();
 
@@ -67,41 +70,38 @@ public class OperationController {
         JSONObject jsonObject;
         try {
             jsonObject = new JSONObject(rawTxt);
-            String objStr = jsonObject.getString(HANDLER);
+            String objHandlerStr = jsonObject.getString(HANDLER);
 
             // On Success Login, make Bot Join Group
-            if(objStr.equals(EVENT_LOGIN)){
+            if(objHandlerStr.equals(EVENT_LOGIN)){
                 if(jsonObject.getString(TYPE).equals(SUCCESS)){
                     if(webSocket != null && webSocket.isOpen()){
                         webSocket.sendText(Utils.getInstance().prepareJsonForGroupJoin(roomName));
                     }
-
-                    MainApp.getMainApp().runOnUiThread(
-                            () -> {
-                                Toast.makeText(MainApp.getMainApp(), "Success", Toast.LENGTH_SHORT).show();
-                            }
-                    );
+                    EventBus.getDefault().post(SUCCESS);
                 }
                 if(jsonObject.getString(TYPE).equals(FAILED)){
                     String reason = jsonObject.getString(REASON);
-                    MainApp.getMainApp().runOnUiThread(
-                            () -> {
-                                Toast.makeText(MainApp.getMainApp(), reason, Toast.LENGTH_SHORT).show();
-                            }
-                    );
-                    //return;
+                    EventBus.getDefault().post(FAILED);
                 }
             }
 
+            if(objHandlerStr.equals(EVENT_ROOM)){
+                String sender = jsonObject.getString("from");
+                String body = jsonObject.getString("body");
+                String messageStr = String.format(Locale.getDefault(), "%s: %s", sender, body);
+                EventBus.getDefault().post(messageStr);
+            }
+
             // Welcome User -- Bot Event
-            if(objStr.equals(EVENT_ROOM)){
+            if(objHandlerStr.equals(EVENT_ROOM)){
                 if(jsonObject.getString(TYPE).equals(USER_JOINED)){
                     sendGroupMsg(webSocket, jsonObject.getString(NAME), jsonObject.getString(USERNAME) + ": Welcome \uD83D\uDC7B");
                 }
             }
 
             // Handle Rest Room Events
-            if(objStr.equals(EVENT_ROOM)){
+            if(objHandlerStr.equals(EVENT_ROOM)){
                 if(jsonObject.getString(TYPE).equals(MSG_TYPE_TEXT)){
                     // To make bot join other Groups
 

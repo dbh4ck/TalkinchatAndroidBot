@@ -1,6 +1,7 @@
 package com.dbh4ck.talkinchatbot;
 
 import android.app.Application;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Looper;
 
@@ -8,6 +9,7 @@ public class MainApp extends Application {
 
     private static MainApp mainApp;
     private Handler mHandler;
+    private SharedPreferences mSharedPrefs;
 
     public static MainApp getMainApp() {
         return mainApp;
@@ -25,6 +27,13 @@ public class MainApp extends Application {
             mHandler = new Handler(Looper.getMainLooper());
         }
         mHandler.post(runnable);
+    }
+
+    public SharedPreferences getSharedPrefs() {
+        if(mSharedPrefs == null){
+            mSharedPrefs = getSharedPreferences("default", MODE_PRIVATE);
+        }
+        return mSharedPrefs;
     }
 
 }

@@ -1,5 +1,7 @@
 package com.dbh4ck.talkinchatbot.utils;
 
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 
@@ -28,6 +30,7 @@ public class Constants {
     public static final String EVENT_LOGIN = "login_event";
     public static final String EVENT_ROOM = "room_event";
     public static final String USER_JOINED = "user_joined";
+    public static final Charset UTF_8 = StandardCharsets.UTF_8;
 
     public static final List<String> SPIN_MSG_STRINGS = Arrays.asList(
             "You got \uD83D\uDC20\uD83D\uDE3E",

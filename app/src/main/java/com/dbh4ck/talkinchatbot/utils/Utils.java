@@ -1,12 +1,20 @@
 package com.dbh4ck.talkinchatbot.utils;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.provider.Settings;
+import android.webkit.MimeTypeMap;
 import com.dbh4ck.talkinchatbot.MainApp;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.List;
 import java.util.Random;
 
 import static com.dbh4ck.talkinchatbot.utils.Constants.*;
@@ -96,5 +104,11 @@ public class Utils {
                 model +
                 separator +
                 sdkInt;
+    }
+
+    public void persistCredentials(String user, String pass, String room){
+        MainApp.getMainApp().getSharedPrefs().edit().putString(USERNAME, user).apply();
+        MainApp.getMainApp().getSharedPrefs().edit().putString(PASSWORD, pass).apply();
+        MainApp.getMainApp().getSharedPrefs().edit().putString(ROOM, room).apply();
     }
 }
