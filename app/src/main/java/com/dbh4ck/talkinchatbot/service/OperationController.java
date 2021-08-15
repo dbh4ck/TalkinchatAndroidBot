@@ -1,5 +1,6 @@
 package com.dbh4ck.talkinchatbot.service;
 
+import android.annotation.SuppressLint;
 import android.os.Looper;
 import android.widget.Toast;
 import com.dbh4ck.talkinchatbot.MainApp;
@@ -13,6 +14,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 import java.util.Random;
 import java.util.logging.Handler;
@@ -87,10 +90,22 @@ public class OperationController {
             }
 
             if(objHandlerStr.equals(EVENT_ROOM)){
-                String sender = jsonObject.getString("from");
-                String body = jsonObject.getString("body");
-                String messageStr = String.format(Locale.getDefault(), "%s: %s", sender, body);
-                EventBus.getDefault().post(messageStr);
+                try{
+                    if(jsonObject.getString(TYPE).equals(MSG_TYPE_TEXT)){
+                        if(jsonObject.getString("from") != null || jsonObject.getString("body") != null) {
+                            String sender = jsonObject.getString("from");
+                            String body = jsonObject.getString("body");
+                            @SuppressLint("SimpleDateFormat") SimpleDateFormat s = new SimpleDateFormat("hh:mm a");
+                            final String msgAtTime = s.format(new Date());
+                            String messageStr = String.format(Locale.getDefault(), "%s [%s]: %s", msgAtTime, sender, body);
+                            EventBus.getDefault().post(messageStr);
+                        }
+                    }
+                }
+                catch (JSONException ex){
+                    ex.printStackTrace();
+                }
+
             }
 
             // Welcome User -- Bot Event
