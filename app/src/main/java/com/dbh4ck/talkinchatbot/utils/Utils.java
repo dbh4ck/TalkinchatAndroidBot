@@ -38,9 +38,12 @@ public class Utils {
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put(HANDLER, LOGIN);
-            jsonObject.put(REQ_ID, generateRandomId());
             jsonObject.put(USERNAME, userName);
             jsonObject.put(PASSWORD, passWord);
+            jsonObject.put(SESSION, generateRandomId());
+            jsonObject.put(SDK, String.valueOf(Build.VERSION.SDK_INT));
+            jsonObject.put(VER, String.valueOf(VERSION));
+            jsonObject.put(REQ_ID, generateRandomId());
         } catch (JSONException e) {
             e.printStackTrace();
         }

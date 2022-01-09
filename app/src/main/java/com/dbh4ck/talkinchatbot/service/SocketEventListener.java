@@ -78,7 +78,7 @@ public class SocketEventListener implements WebSocketListener {
 
     @Override
     public void onTextMessage(WebSocket websocket, String text) throws Exception {
-        Log.e("dbh4ck", "onTextMessage");
+        Log.e("dbh4ck", "onTextMessage : " + text);
         OperationController.getController().handleSocketMsg(websocket, userName, roomName, text);
     }
 

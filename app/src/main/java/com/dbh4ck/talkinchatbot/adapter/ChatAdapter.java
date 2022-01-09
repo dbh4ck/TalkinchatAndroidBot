@@ -1,5 +1,6 @@
 package com.dbh4ck.talkinchatbot.adapter;
 
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,6 +49,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     public void updateMessages(List<String> newList){
         messageList.clear();
         messageList.addAll(newList);

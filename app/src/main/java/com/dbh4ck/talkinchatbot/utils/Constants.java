@@ -11,6 +11,10 @@ public class Constants {
     public static final String LOGIN = "login";
     public static final String HANDLER = "handler";
     public static final String REQ_ID = "id";
+    public static final String SESSION = "session";
+    public static final String SDK = "sdk";
+    public static final String VER = "ver";
+    public static final int VERSION = 296;
     public static final String TYPE = "type";
     public static final String SUCCESS = "success";
     public static final String FAILED = "failed";
